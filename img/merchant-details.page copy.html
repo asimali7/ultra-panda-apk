@@ -1,0 +1,2589 @@
+<ion-header>
+    <header-toolbar label="header.merchants"></header-toolbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="ngForm">
+        <ion-grid>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center" size="5">
+                    <ion-label>{{ 'common.current' | translate }}</ion-label>
+                </ion-col>
+                <ion-col class="ion-text-center" size="5">
+                    <ion-label>{{ 'common.updated' | translate }}</ion-label>
+                </ion-col>
+            </ion-row>
+
+            <!--Merchant Detail-->
+            <ion-label class="label">{{ 'merchantDetails.details' | translate }}</ion-label>
+
+            <!-- Merchant Logo -->
+            <ion-row class="logoColumns">
+                <ion-col size="2" class="marginCenter">
+                    <ion-label>{{ 'merchantDetails.logo' | translate }}</ion-label>
+                </ion-col>
+                <ion-col size="5" *ngIf="showCurrentColumn()">
+                    <ion-row>
+                        <ion-col size="6">
+                            <div class="imgPreview">
+                                <img *ngIf="logo" [src]="logo"/>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col [size]="(!showCurrentColumn())? '10':'5'">
+                    <ion-row>
+                        <ion-col size="6">
+                            <div class="imgPreview">
+                                <img *ngIf="tmpLogo" [src]="tmpLogo"/>
+                            </div>
+                        </ion-col>
+                        <ion-col size="6" class="marginCenter" *ngIf="isImageChangable">
+                            <mat-form-field>
+                                <input matInput name="business_logo" formControlName="business_logo"
+                                       style="display: none">
+                                <input #fileInput type="file" name="tmpLogo" accept="image/*"
+                                       (change)="uploadLogo($event)"
+                                       *ngIf="!isDisabled('business_logo')">
+                                <ion-icon class="ion-float-right" color="danger" name="close" (click)="removeLogo()"
+                                          *ngIf="!isDisabled('business_logo')"></ion-icon>
+                                <mat-error>{{ getErrors('business_logo') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="6" class="ion-no-padding">
+                    <!-- Merchant name -->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.shopName' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.business_name || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!-- Merchant register id -->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.registerId' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.business_registration_id || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                    <!-- Merchant name -->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.shopName' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="business_name" formControlName="business_name">
+                                <mat-error>{{ getErrors('business_name') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!-- Merchant register id -->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.registerId' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="business_registration_id"
+                                       formControlName="business_registration_id">
+                                <mat-error>{{ getErrors('business_registration_id') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <!-- Merchant address -->
+            <ion-row class="nameColumns">
+                <ion-col size="2" class="marginCenter">
+                    <ion-label>{{ 'merchantDetails.address' | translate }}</ion-label>
+                </ion-col>
+                <ion-col size="5" *ngIf="showCurrentColumn()">
+                    <mat-form-field appearance="outline">
+                        <textarea matInput [value]="current.address || ''" disabled rows="5" maxlength="250"></textarea>
+                    </mat-form-field>
+                </ion-col>
+                <ion-col [size]="(!showCurrentColumn())? '10':'5'">
+                    <mat-form-field appearance="outline">
+                        <textarea matInput name="address" formControlName="address" rows="5" maxlength="250"></textarea>
+                        <mat-error>{{ getErrors('address') }}</mat-error>
+                    </mat-form-field>
+                </ion-col>
+            </ion-row>
+
+            <!-- Merchant description -->
+            <ion-row class="nameColumns">
+                <ion-col size="2" class="marginCenter">
+                    <ion-label>{{ 'merchantDetails.briefBusiness' | translate }}</ion-label>
+                </ion-col>
+                <ion-col size="5" *ngIf="showCurrentColumn()">
+                    <mat-form-field appearance="outline">
+                        <textarea matInput [value]="current.description || ''" disabled rows="3"></textarea>
+                    </mat-form-field>
+                </ion-col>
+                <ion-col [size]="(!showCurrentColumn())? '10':'5'">
+
+                    <mat-form-field appearance="outline">
+                        <textarea matInput name="description" formControlName="description" rows="3"></textarea>
+                        <mat-error>{{ getErrors('description') }}</mat-error>
+                    </mat-form-field>
+                </ion-col>
+
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Merchant category-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchantCategory' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput class="fakeInput" disabled>
+                                <mat-select *ngIf="merchantData" [value]="merchantData.merchant_category_name" disabled>
+                                    <mat-option [value]="merchantData.merchant_category_name">
+                                        {{ merchantData.merchant_category_name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--merchant vircle group-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.vircleGroup' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput class="fakeInput" disabled>
+                                <mat-select [value]="current.vircle_group_id || []" disabled multiple>
+                                    <mat-option *ngFor="let vircleGroup of vircleGroupList" [value]="vircleGroup.key">
+                                        {{ vircleGroup.value }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Merchant category-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchantCategory' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <mat-select formControlName="merchant_category_id">
+                                    <mat-option *ngFor="let category of merchantCategoryList" [value]="category.id">
+                                        {{ category.category_name }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>{{ getErrors('merchant_category_id') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--merchant vircle group-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.vircleGroup' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9">
+                            <mat-form-field appearance="outline">
+                                <mat-select formControlName="vircle_group_id" multiple
+                                            (openedChange)="vircleGroupSelected($event)">
+                                    <mat-option *ngFor="let vircleGroup of vircleGroupList" [value]="vircleGroup.key">
+                                        {{ vircleGroup.value }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>{{ getErrors('vircle_group_id') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Merchant group-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchantGroup' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput class="fakeInput" disabled>
+                                <mat-select *ngIf="merchantData" [value]="merchantData.merchant_group_name" disabled>
+                                    <mat-option [value]="merchantData.merchant_group_name">
+                                        {{ merchantData.merchant_group_name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Access Group-->
+                    <ion-row class="categoryColumns" [ngClass]="{ 'fakeInput' : !isAdmin() }">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.accessRole' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput class="fakeInput" disabled>
+                                <mat-select [value]="current.user_group_ids || []" disabled multiple>
+                                    <mat-option *ngFor="let role of accessRoleList" [value]="role.id">
+                                        {{ role.name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Merchant group-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchantGroup' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size-lg="8">
+                            <mat-form-field appearance="outline">
+                                <mat-select formControlName="merchant_group_id">
+                                    <mat-option *ngFor="let merchant of merchantGroupList" [value]="merchant.id">
+                                        {{ merchant.group_name }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>{{ getErrors('merchant_group_id') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Access Group-->
+                    <ion-row class="categoryColumns" [ngClass]="{ 'fakeInput' : !isAdmin() }">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.accessRole' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size-lg="9">
+                            <mat-form-field appearance="outline">
+                                <mat-select formControlName="user_group_ids" multiple>
+                                    <mat-option *ngFor="let role of accessRoleList" [value]="role.id">
+                                        {{ role.name }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>{{ getErrors('user_group_ids') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fpMerchantIdPOS' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.host_id || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay Host Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fpTerminalIdPOS' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.host_terminal_id || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fpMerchantIdPOS' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="host_id" formControlName="host_id">
+                                <mat-error>{{ getErrors('host_id') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay Host Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fpTerminalIdPOS' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="9">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="host_terminal_id" formControlName="host_terminal_id">
+                                <mat-error>{{ getErrors('host_terminal_id') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fpHostIdTopUp' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.topup_host_id || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fpTerminalIdTopUp' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.topup_terminal_id || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fpHostIdTopUp' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="topup_host_id" formControlName="topup_host_id">
+                                <mat-error>{{ getErrors('topup_host_id') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fpTerminalIdTopUp' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="9">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="topup_terminal_id" formControlName="topup_terminal_id">
+                                <mat-error>{{ getErrors('topup_terminal_id') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="4" class="ion-no-padding">
+                    <!--Business Wallet Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="5" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.businessWalletId' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="7" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.business_wallet_id || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="4" class="ion-no-padding">
+                    <!--Business Account Number-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="5" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.businessAccountNumber' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="7" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.business_account_number || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="4" class="ion-no-padding">
+                    <!--Business Account Number-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="6" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.maxAmountAllowedForIOweYou' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="6" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.max_amount_allowed_for_iou || 50" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="4" class="ion-no-padding">
+                    <!--Business Wallet Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="5" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.businessWalletId' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="7">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="business_wallet_id" formControlName="business_wallet_id">
+                                <mat-error>{{ getErrors('business_wallet_id') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="4" class="ion-no-padding">
+                    <!--Business Account Number-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="5" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.businessAccountNumber' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="7">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="business_account_number"
+                                       formControlName="business_account_number">
+                                <mat-error>{{ getErrors('business_account_number') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="4" class="ion-no-padding">
+                    <!--Business Account Number-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="6" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.maxAmountAllowedForIOweYou' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="6">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="max_amount_allowed_for_iou"
+                                       formControlName="max_amount_allowed_for_iou"
+                                       type="number">
+                                <mat-error>{{ getErrors('max_amount_allowed_for_iou') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Field_app_service_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fieldAppServiceEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_field_app_service_enabled || false"
+                                          disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Balance_check_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.balanceCheckEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_balance_check_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Merchant_store_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchantStoreEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_merchant_store_enabled || false"
+                                          disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+
+                    <!-- Topup_agent_enabled Option -->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.topupAgentEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_topup_agent_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Field_app_service_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.fieldAppServiceEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_field_app_service_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Balance_check_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.balanceCheckEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_balance_check_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Merchant_store_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchantStoreEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_merchant_store_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+
+                    <!-- Topup_agent_enabled Option -->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.topupAgentEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_topup_agent_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="3" class="ion-no-padding"><!--Advance_structure_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.advanceStructureEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_advance_structure_enabled || false"
+                                          disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--estore_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.estoreEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_estore_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">  <!--vircle_mall Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.vircleMallEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_vm_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">   <!--estore_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.externalSalesEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_external_sales_enabled || false"
+                                          disabled></ion-checkbox>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="3" class="ion-no-padding"><!--Advance_structure_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.advanceStructureEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_advance_structure_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--estore_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.estoreEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_estore_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">  <!--vircle_mall Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.vircleMallEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_vm_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">   <!--estore_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.externalSalesEnabled' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_external_sales_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="3" class="ion-no-padding">
+                    <!--estore_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.ioweyou' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_ioweu_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+
+                    <!--spent at store Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.spentAtStore' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.spend_at_store || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--spent at store Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.customAlertsEnabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_custom_alerts_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+
+                    <!--Payment Channel Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_payment_channel_enabled' | translate }}</ion-label>
+                            <span class="material-icons"
+                                  matTooltip="{{ 'merchantDetails.is_payment_channel_enabled' | translate }}">info_outline</span>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_payment_channel_enabled || false"
+                                          disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--estore_enabled Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.ioweyou' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_ioweu_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+
+                    <!--spent at store Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.spentAtStore' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="spend_at_store"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--spent at store Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.customAlertsEnabled' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_custom_alerts_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+
+                    <!--Payment Channel Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_payment_channel_enabled' | translate }}</ion-label>
+                            <span class="material-icons"
+                                  matTooltip="{{ 'merchantDetails.is_payment_channel_enabled' | translate }}">info_outline</span>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_payment_channel_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Payment Channel Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_payment_settlement_commission_enabled' | translate }}</ion-label>
+                            <span class="material-icons"
+                                  matTooltip="{{ 'merchantDetails.is_payment_settlement_commission_enabled' | translate }}">info_outline</span>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_payment_settlement_commission_enabled || false"
+                                          disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Payment Channel Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_pos_front_office' | translate }}</ion-label>
+                            <span class="material-icons"
+                                  matTooltip="{{ 'merchantDetails.is_pos_front_office' | translate }}">info_outline</span>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_pos_front_office || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+
+                    <!--Trasnport Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_transport_enabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_transport_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+
+                    <!--Trasnport Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.e_invoicing' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_einvoicing_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Payment Channel Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_payment_settlement_commission_enabled' | translate }}</ion-label>
+                            <span class="material-icons"
+                                  matTooltip="{{ 'merchantDetails.is_payment_settlement_commission_enabled' | translate }}">info_outline</span>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_payment_settlement_commission_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Payment Channel Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_pos_front_office' | translate }}</ion-label>
+                            <span class="material-icons"
+                                  matTooltip="{{ 'merchantDetails.is_pos_front_office' | translate }}">info_outline</span>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_pos_front_office"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Trasnport Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_transport_enabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_transport_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="3" class="ion-no-padding">
+                    <!--Trasnport Option-->
+                    <ion-row class="categoryColumns">
+                        <ion-col size="10" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.e_invoicing' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-checkbox formControlName="is_einvoicing_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+
+            <!--Nutrition_score_enabled Option-->
+            <!-- <ion-row class="categoryColumns">
+              <ion-col size="2" class="marginCenter">
+                <ion-label>{{ 'merchantDetails.nutritionScoreEnabled' | translate }}</ion-label>
+              </ion-col>
+              <ion-col size="5" *ngIf="showCurrentColumn()">
+                <ion-checkbox [checked]="current.is_nutrition_score_enabled || false" disabled></ion-checkbox>
+              </ion-col>
+              <ion-col [size]="(!showCurrentColumn())? '10':'5'">
+                <ion-checkbox formControlName="is_nutrition_score_enabled"></ion-checkbox>
+              </ion-col>
+            </ion-row> -->
+
+
+            <ion-spinner *ngIf="loadingSecurityPin" class="spinner"></ion-spinner>
+            <app-security-pin-form #securityPinForm *ngIf="showSecurityPin" [nfcList]="nfcList" [pinList]="pinList"
+                                   [currentPinList]="currentPinList" [isPendingStatus]="showCurrentColumn()"
+                                   [isUpdatable]="isPinUpdatable">
+            </app-security-pin-form>
+
+            <!-- Merchant terms_and_condition -->
+            <ion-row class="nameColumns">
+                <ion-col size="2" class="marginCenter">
+                    <ion-label>{{ 'merchantDetails.termsAndCondition' | translate }}</ion-label>
+                </ion-col>
+                <ion-col size="5" *ngIf="showCurrentColumn()">
+                    <quill-editor
+                            [ngClass]="{ 'quill-editor-error': getErrors('terms_and_condition') && submitAttempted}"
+                            name="terms_and_condition" formControlName="terms_and_condition" [modules]="modules"
+                            placeholder="">
+                        <quill-view-html [content]="current.terms_and_condition || ''" disabled></quill-view-html>
+                    </quill-editor>
+                </ion-col>
+                <ion-col [size]="(!showCurrentColumn())? '10':'5'">
+                    <quill-editor
+                            [ngClass]="{ 'quill-editor-error': getErrors('terms_and_condition') && submitAttempted}"
+                            name="terms_and_condition" formControlName="terms_and_condition" [modules]="modules"
+                            placeholder="">
+                    </quill-editor>
+                    <div>
+                        <mat-error *ngIf="submitAttempted">{{ getErrors('terms_and_condition') }}</mat-error>
+                    </div>
+                </ion-col>
+            </ion-row>
+
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.tax_tin_no' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.tax_tin_no || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.ssm_reg' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.ssm_reg || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.tax_tin_no' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="tax_tin_no" formControlName="tax_tin_no">
+                                <mat-error>{{ getErrors('tax_tin_no') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.ssm_reg' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="9">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="ssm_reg" formControlName="ssm_reg">
+                                <mat-error>{{ getErrors('ssm_reg') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.sst_reg_no' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.sst_reg_no || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchant_msic_code' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.merchant_msic_code || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.sst_reg_no' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="sst_reg_no" formControlName="sst_reg_no">
+                                <mat-error>{{ getErrors('sst_reg_no') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchant_msic_code' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="9">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="merchant_msic_code" formControlName="merchant_msic_code">
+                                <mat-error>{{ getErrors('merchant_msic_code') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.finance_email' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.finance_email || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.dispute_email' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.dispute_email || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.finance_email' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="finance_email" formControlName="finance_email">
+                                <mat-error>{{ getErrors('finance_email') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.dispute_email' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="9">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="dispute_email" formControlName="dispute_email">
+                                <mat-error>{{ getErrors('dispute_email') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchant_url' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="8" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.merchant_url || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchant_contact_no' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="9" *ngIf="showCurrentColumn()">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.merchant_contact_no || ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.updated' | translate }}</b></ion-label>
+                </ion-col>
+                <ion-col size="1.5"></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Host Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="4" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchant_url' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="merchant_url" formControlName="merchant_url">
+                                <mat-error>{{ getErrors('merchant_url') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="6" class="ion-no-padding">
+                    <!--Fasspay TopUp Terminal Id-->
+                    <ion-row class="nameColumns">
+                        <ion-col size="3" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.merchant_contact_no' | translate }}</ion-label>
+                        </ion-col>
+
+                        <ion-col size="9">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="merchant_contact_no" formControlName="merchant_contact_no">
+                                <mat-error>{{ getErrors('merchant_contact_no') }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <ion-grid *ngIf="isAdmin()">
+            <!-- Settlement & MDR COnfiguration -->
+            <ion-label class="label">{{ 'merchantDetails.settlementAndMDR' | translate }}</ion-label>
+
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label><b>{{ 'common.current' | translate }}</b></ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row class="mb-30">
+                <ion-col class="ion-no-padding" size="12" formGroupName="mdr">
+
+                    <ion-row>
+                        <ion-col class="ion-no-padding" size="6">
+                            <ion-row class="nameColumns">
+                                <!-- Name -->
+                                <ion-col size="4" class="ion-no-padding pt-10">
+                                    {{ 'settlementAndMDRDetails.name.identifier_type' | translate }}
+                                </ion-col>
+
+                                <!-- Identifier Type -->
+                                <ion-col size="8">
+                                    <mat-form-field appearance="outline">
+                                        <input matInput class="fakeInput">
+                                        <mat-select name="identifier_type" formControlName="identifier_type"
+                                                    [value]="identifier_type || '' ">
+                                            <mat-option *ngFor="let idType of identifierList" [value]="idType.key">
+                                                {{ idType.value }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </ion-col>
+                            </ion-row>
+                        </ion-col>
+                        <ion-col class="ion-no-padding" size="6">
+                            <ion-row class="nameColumns">
+                                <!-- Name -->
+                                <ion-col size="4" class="ion-no-padding pt-10  pl-10">
+                                    {{ 'settlementAndMDRDetails.name.identifier_reference' | translate }}
+                                </ion-col>
+
+                                <!-- Rate -->
+                                <ion-col size="8">
+                                    <mat-form-field appearance="outline">
+                                        <input matInput name="identifier_reference"
+                                               formControlName="identifier_reference">
+                                    </mat-form-field>
+                                </ion-col>
+                            </ion-row>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col class="ion-no-padding" size="12">
+                    <b> {{ 'settlementAndMDRDetails.title.settlementDetails' | translate }}</b>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" formGroupName="settlement" *ngIf="showCurrentColumn()">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10">
+                            {{ 'settlementAndMDRDetails.details.cash' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput class="fakeInput" disabled>
+                                <mat-select formControlName="bankName"
+                                            [value]="current.settlement? current.settlement.bankName : '' "
+                                            disabled>
+                                    <mat-option *ngFor="let bank of bankList" [value]="bank.key">
+                                        {{ bank.value }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" *ngIf="showCurrentColumn()">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10  pl-10">
+                            {{ 'settlementAndMDRDetails.details.bankAccountName' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput
+                                       [value]="current.settlement? current.settlement.bankAccountName || '' : ''"
+                                       disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" *ngIf="showCurrentColumn()">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10">
+                            {{ 'settlementAndMDRDetails.details.item' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.settlement? current.settlement.accountNo : ''"
+                                       disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" *ngIf="showCurrentColumn()">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10  pl-10">
+                            {{ 'settlementAndMDRDetails.details.mealplan' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.settlement? current.settlement.swiftCode : ''"
+                                       disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" *ngIf="showCurrentColumn()">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10">
+                            {{ 'settlementAndMDRDetails.details.ecommerce' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput [value]="current.settlement? current.settlement.email : ''" disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col class="ion-no-padding" size="6">
+
+                    <!-- price per provision -->
+                    <ion-row class="nameColumns" *ngIf="showCurrentColumn()">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10  pl-10">
+                            {{ 'settlementAndMDRDetails.details.pricePerProvision' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput type="number"
+                                       [value]="current.settlement? current.settlement.pricePerProvision : ''"
+                                       disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col class="ion-no-padding" size="6">
+
+                    <!-- price per consumer -->
+                    <ion-row class="nameColumns" *ngIf="showCurrentColumn()">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10">
+                            {{ 'settlementAndMDRDetails.details.pricePerConsumer' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput type="number"
+                                       [value]="current.settlement? current.settlement.pricePerConsumer : ''"
+                                       disabled>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row style="height: 42px;" *ngIf="showCurrentColumn()">
+                <ion-col class="ion-text-center">
+                    <ion-label></ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showCurrentColumn()">
+                <ion-col size="12">
+                    <b> {{ 'settlementAndMDRDetails.title.settlementDetails' | translate }}</b>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" formGroupName="settlement">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10">
+                            {{ 'settlementAndMDRDetails.details.cash' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput class="fakeInput">
+                                <mat-select formControlName="bankName"
+                                            [value]="current.settlement? current.settlement.bankName : '' ">
+                                    <mat-option *ngFor="let bank of bankList" [value]="bank.key">
+                                        {{ bank.value }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" formGroupName="settlement">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10  pl-10">
+                            {{ 'settlementAndMDRDetails.details.bankAccountName' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="details" formControlName="bankAccountName">
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" formGroupName="settlement">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10">
+                            {{ 'settlementAndMDRDetails.details.item' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="details" formControlName="accountNo">
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" formGroupName="settlement">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10  pl-10">
+                            {{ 'settlementAndMDRDetails.details.mealplan' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="details" formControlName="swiftCode">
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col class="ion-no-padding" size="6">
+                    <ion-row class="nameColumns" formGroupName="settlement">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10">
+                            {{ 'settlementAndMDRDetails.details.ecommerce' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="details" formControlName="email">
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col class="ion-no-padding" size="6">
+
+
+                    <!-- price per provision -->
+                    <ion-row class="nameColumns" formGroupName="settlement">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10  pl-10">
+                            {{ 'settlementAndMDRDetails.details.pricePerProvision' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput type="number" name="pricePerProvision"
+                                       formControlName="pricePerProvision">
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col class="ion-no-padding" size="6">
+
+                    <!-- price per consumer -->
+                    <ion-row class="nameColumns" formGroupName="settlement">
+                        <!-- Details -->
+                        <ion-col size="4" class="ion-no-padding pt-10">
+                            {{ 'settlementAndMDRDetails.details.pricePerConsumer' | translate }}
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput type="number" name="pricePerConsumer"
+                                       formControlName="pricePerConsumer">
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+
+        <ion-grid>
+            <!--E-Store Dilevery-->
+            <ion-label class="label">{{ 'merchantDetails.onlineStoreConfig' | translate }}</ion-label>
+            <ion-row class="categoryColumns">
+                <ion-col size="2" class="marginCenter">
+                    <ion-label>{{ 'merchantDetails.deliveryEnabled' | translate }}</ion-label>
+                </ion-col>
+                <ion-col size="5" *ngIf="showCurrentColumn()">
+                    <ion-checkbox [checked]="current.delivery_enabled || false" disabled></ion-checkbox>
+                </ion-col>
+                <ion-col [size]="(!showCurrentColumn())? '10':'5'">
+                    <ion-checkbox formControlName="delivery_enabled"></ion-checkbox>
+                </ion-col>
+            </ion-row>
+            <ng-container *ngIf="ngForm.value.delivery_enabled">
+                <ion-row *ngIf="showCurrentColumn()">
+                    <ion-col class="ion-text-center">
+                        <ion-label>{{ 'common.current' | translate }}</ion-label>
+                    </ion-col>
+                    <ion-col size="1.5"></ion-col>
+                </ion-row>
+                <ion-row *ngIf="showCurrentColumn()">
+                    <ion-col size="6">
+                        {{ 'merchantDetails.deliveryOptions' | translate }}
+                    </ion-col>
+                    <!-- <ion-col size="2"></ion-col> -->
+                    <ion-col size="6">
+                        {{ 'merchantDetails.deliveryCharges' | translate }}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6">
+                        <ion-row class="nameColumns" formGroupName="delivery" *ngIf="showCurrentColumn()">
+                            <!-- Pickup at school -->
+                            <ion-col size="3" class="marginCenter">
+                                {{ 'merchantDetails.pickup_at_school' | translate }}
+                            </ion-col>
+                            <ion-col size="1" class="margin-top-15  mt-left-15">
+                                <ion-checkbox [checked]="merchantData.delivery.pickup_at_school || false"
+                                              disabled></ion-checkbox>
+                            </ion-col>
+                            <ion-col size="8">
+
+                            </ion-col>
+                        </ion-row>
+                        <ion-row class="nameColumns" formGroupName="delivery" *ngIf="showCurrentColumn()">
+                            <!-- Deliver at home -->
+                            <ion-col size="3" class="marginCenter">
+                                {{ 'merchantDetails.deliver_at_home' | translate }}
+                            </ion-col>
+                            <ion-col size="1" class="margin-top-15  mt-left-15">
+                                <ion-checkbox [checked]="merchantData.delivery.deliver_at_home || false"
+                                              disabled></ion-checkbox>
+                            </ion-col>
+                            <ion-col size="8">
+
+                            </ion-col>
+                            <!-- <ion-col [size]="(!showCurrentColumn())? '1':'5'">
+                              <ion-checkbox formControlName="deliver_at_home"></ion-checkbox>
+                            </ion-col> -->
+                        </ion-row>
+                        <!-- Pickup at stores -->
+                        <ion-row class="nameColumns" formGroupName="delivery" *ngIf="showCurrentColumn()">
+                            <!-- <ion-col size="6"> -->
+                            <ng-container formArrayName="pickup_at_store"
+                                          *ngFor="let storeObj of this.ngForm.get('delivery').get('pickup_at_store').controls; let i = index;">
+                                <ng-container [formGroupName]="i">
+                                    <!-- <ion-label class="userLabel">{{ 'merchantDetails.pickup_at_store' | translate }} {{ i+1 }}</ion-label> -->
+                                    <ion-row class="categoryColumns">
+                                        <ion-col size="5" class="marginCenter">
+                                            <ion-label>{{ 'merchantDetails.pickup_at_store' | translate }} {{ i + 1 }}</ion-label>
+                                        </ion-col>
+                                        <ion-col size="1">
+                                            <ion-checkbox [checked]="storeObj.value.store || false"
+                                                          disabled></ion-checkbox>
+                                        </ion-col>
+                                        <ion-col size="6">
+                                            <mat-form-field appearance="outline">
+                                                <!-- <input matInput type="text" [value]="storeObj ? storeObj.address || '' : ''"  name="address" formControlName="address"> -->
+                                                <textarea matInput formControlName="address" name="address" rows="2"
+                                                          cols="50">
+                            {{storeObj ? storeObj.address || '' : '' }}
+                          </textarea>
+                                            </mat-form-field>
+                                        </ion-col>
+                                    </ion-row>
+                                </ng-container>
+                            </ng-container>
+                            <!-- </ion-col> -->
+                        </ion-row>
+
+                    </ion-col>
+                    <!-- <ion-col size="2"></ion-col> -->
+                    <ion-col size="6">
+                        <!-- Deliver Charges -->
+                        <ion-row class="nameColumns" formGroupName="delivery" *ngIf="showCurrentColumn()">
+                            <ion-row formArrayName="delivery_charges"
+                                     *ngFor="let tierObj of this.ngForm.get('delivery').get('delivery_charges').controls; let i = index;">
+                                <ion-col [formGroupName]="i">
+                                    <ion-row class="categoryColumns">
+                                        <ion-label
+                                                class="userLabel margin-top-15">{{ 'merchantDetails.tier' | translate }} {{ i + 1 }}</ion-label>
+                                        <ion-col size="1" class="margin-top-15 text-center">
+                                            <ion-checkbox [checked]="tierObj.value.tier || false"
+                                                          disabled></ion-checkbox>
+                                        </ion-col>
+                                        <!-- <ion-col class="margin-top-15 text-center" [size]="(!showCurrentColumn())? '2':'5'">
+                                          <ion-checkbox formControlName="tier"></ion-checkbox>
+                                        </ion-col> -->
+                                        <ion-col size="2">
+                                            <mat-form-field appearance="outline">
+                                                <input matInput name="from_amount" formControlName="from_amount"
+                                                       [value]="tierObj.value.from_amount || ''" disabled>
+                                            </mat-form-field>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <mat-form-field appearance="outline">
+                                                <input matInput name="to_amount" formControlName="to_amount"
+                                                       [value]="tierObj.value.to_amount || ''" disabled>
+                                            </mat-form-field>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <mat-form-field appearance="outline">
+                                                <input matInput name="charges" formControlName="charges"
+                                                       [value]="tierObj.value.charges || ''" disabled>
+                                            </mat-form-field>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-col>
+                            </ion-row>
+                        </ion-row>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="nameColumns" formGroupName="delivery" *ngIf="showCurrentColumn()">
+                    <!-- Tax Perc -->
+                    <ion-col size="2" class="marginCenter">
+                        <ion-label class="tax-lbl">{{ 'merchantDetails.tax' | translate }}</ion-label>
+                    </ion-col>
+                    <ion-col size="2">
+                        <mat-form-field appearance="outline">
+                            <input matInput type="number" [value]="current.delivery? current.delivery.tax || '' : ''"
+                                   name="tax" formControlName="tax">
+                        </mat-form-field>
+                    </ion-col>
+                    <ion-col size="1" class="marginCenter">%</ion-col>
+                </ion-row>
+                <ion-row *ngIf="showCurrentColumn()">
+                    <ion-col class="ion-text-center">
+                        <ion-label>{{ 'common.updated' | translate }}</ion-label>
+                    </ion-col>
+                    <ion-col size="1.5"></ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6">
+                        {{ 'merchantDetails.deliveryOptions' | translate }}
+                    </ion-col>
+                    <!-- <ion-col size="2"></ion-col> -->
+                    <ion-col size="6">
+                        {{ 'merchantDetails.deliveryCharges' | translate }}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6">
+                        <ion-row class="nameColumns" formGroupName="delivery">
+                            <!-- Pickup at school -->
+                            <ion-col size="3" class="marginCenter">
+                                {{ 'merchantDetails.pickup_at_school' | translate }}
+                            </ion-col>
+                            <ion-col size="1" class="margin-top-15 mt-left-15">
+                                <ion-checkbox formControlName="pickup_at_school"></ion-checkbox>
+                            </ion-col>
+                            <ion-col size="8">
+
+                            </ion-col>
+                        </ion-row>
+                        <ion-row class="nameColumns" formGroupName="delivery">
+                            <!-- Deliver at home -->
+                            <ion-col size="3" class="marginCenter">
+                                {{ 'merchantDetails.deliver_at_home' | translate }}
+                            </ion-col>
+                            <!-- <ion-col size="1" *ngIf="showCurrentColumn()">
+                              <ion-checkbox [checked]="current.deliver_at_home || false" disabled></ion-checkbox>
+                            </ion-col> -->
+                            <ion-col class="margin-top-15  mt-left-15" size="1">
+                                <ion-checkbox formControlName="deliver_at_home"></ion-checkbox>
+                            </ion-col>
+                            <ion-col size="8">
+
+                            </ion-col>
+                        </ion-row>
+                        <!-- Pickup at stores -->
+                        <ion-row class="nameColumns" formGroupName="delivery">
+                            <!-- <ion-col size="6"> -->
+                            <ng-container formArrayName="pickup_at_store"
+                                          *ngFor="let store of this.ngForm.get('delivery').get('pickup_at_store').controls; let i = index;">
+                                <ng-container [formGroupName]="i">
+                                    <!-- <ion-label class="userLabel">{{ 'merchantDetails.pickup_at_store' | translate }} {{ i+1 }}</ion-label> -->
+                                    <ion-row class="categoryColumns">
+                                        <ion-col size="5" class="marginCenter">
+                                            <ion-label>{{ 'merchantDetails.pickup_at_store' | translate }} {{ i + 1 }}</ion-label>
+                                        </ion-col>
+                                        <!-- <ion-col size="1" *ngIf="showCurrentColumn()">
+                                          <ion-checkbox [checked]="current.store || false" disabled></ion-checkbox>
+                                        </ion-col> -->
+                                        <ion-col size="1" class="margin-top-15">
+                                            <ion-checkbox formControlName="store"></ion-checkbox>
+                                        </ion-col>
+                                        <ion-col size="6">
+                                            <mat-form-field appearance="outline">
+                                                <!-- <input matInput type="text" maxlength="300" [value]="storeObj ? storeObj.address || '' : ''"  name="address" formControlName="address"> -->
+                                                <textarea matInput formControlName="address" name="address" rows="2"
+                                                          cols="50">
+                            {{storeObj ? storeObj.address || '' : '' }}
+                          </textarea>
+                                            </mat-form-field>
+                                        </ion-col>
+                                    </ion-row>
+                                </ng-container>
+                            </ng-container>
+                            <!-- </ion-col> -->
+                        </ion-row>
+                    </ion-col>
+                    <!-- <ion-col size="2"></ion-col> -->
+                    <ion-col size="6">
+                        <!-- Deliver Charges -->
+
+                        <ion-row class="nameColumns" formGroupName="delivery">
+                            <ion-row formArrayName="delivery_charges"
+                                     *ngFor="let tier of this.ngForm.get('delivery').get('delivery_charges').controls; let i = index;">
+                                <ion-col [formGroupName]="i">
+                                    <ion-row *ngIf="i == 0">
+                                        <ion-col size="2">
+
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <ion-label class="text-12">
+                                                From Amount
+                                            </ion-label>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <ion-label class="text-12">
+                                                To Amount
+                                            </ion-label>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <ion-label class="text-12">
+                                                Charges
+                                            </ion-label>
+                                        </ion-col>
+                                        <ion-col size="4">
+
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row class="categoryColumns">
+                                        <ion-label
+                                                class="userLabel margin-top-15">{{ 'merchantDetails.tier' | translate }} {{ i + 1 }}</ion-label>
+                                        <!-- <ion-col class="margin-top-15 text-center" *ngIf="showCurrentColumn()">
+                                          <ion-checkbox [checked]="current.tier || false" disabled></ion-checkbox>
+                                        </ion-col> -->
+                                        <ion-col class="margin-top-15 text-center" size="1">
+                                            <ion-checkbox formControlName="tier"></ion-checkbox>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <mat-form-field appearance="outline">
+                                                <input matInput name="tax" formControlName="from_amount">
+                                            </mat-form-field>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <mat-form-field appearance="outline">
+                                                <input matInput name="tax" formControlName="to_amount">
+                                            </mat-form-field>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <mat-form-field appearance="outline">
+                                                <input matInput name="tax" formControlName="charges">
+                                            </mat-form-field>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-col>
+                            </ion-row>
+                        </ion-row>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="nameColumns" formGroupName="delivery">
+                    <!-- Tax Perc -->
+                    <ion-col size="2" class="marginCenter">
+                        <ion-label class="tax-lbl">{{ 'merchantDetails.tax' | translate }}</ion-label>
+                    </ion-col>
+                    <ion-col size="2">
+                        <mat-form-field appearance="outline">
+                            <input matInput type="number" name="tax" formControlName="tax">
+                        </mat-form-field>
+                    </ion-col>
+                    <ion-col size="1" class="marginCenter">%</ion-col>
+                </ion-row>
+            </ng-container>
+        </ion-grid>
+
+        <!--    Payment Channels Start-->
+        <ion-grid *ngIf="ngForm.value.is_payment_channel_enabled">
+            <ion-row>
+                <ion-col size="12">
+                    <ion-label class="label">{{ 'merchantDetails.payment_channels' | translate }}</ion-label>
+                    <ion-row class="categoryColumns">
+                        <ion-col size="2" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_ringgit_pay_enabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="4" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_ringgit_pay_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                        <ion-col size="4">
+                            <ion-checkbox formControlName="is_ringgit_pay_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="categoryColumns">
+                        <ion-col size="2" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.is_fasspay_enabled' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="4" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_fasspay_enabled || true" disabled></ion-checkbox>
+                        </ion-col>
+                        <ion-col size="4">
+                            <ion-checkbox formControlName="is_fasspay_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+            <ion-row formGroupName="payment_channels">
+                <ion-col size="12"
+                         *ngIf="ngForm.value.is_ringgit_pay_enabled || ngForm.value.is_fasspay_enabled">
+
+                    <ion-row class="categoryColumns" formGroupName="mealPlan">
+                        <ion-col size="2" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.Mealplan' | translate }} </ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="ngForm.value.is_fasspay_enabled">
+                            <ion-checkbox formControlName="is_ewallet_enabled"></ion-checkbox> &nbsp;
+                            {{ 'merchantDetails.E-Wallet' | translate }}
+                        </ion-col>
+                        <ion-col size="3" *ngIf="ngForm.value.is_ringgit_pay_enabled">
+                            <ion-checkbox formControlName="is_fpx_enabled"></ion-checkbox>&nbsp;
+                            {{ 'merchantDetails.FPX_Casa_Only' | translate }}
+                        </ion-col>
+
+                        <ion-col size="3" *ngIf="ngForm.value.is_ringgit_pay_enabled">
+                            <ion-checkbox formControlName="is_fpx_card_enabled"></ion-checkbox>&nbsp;
+                            {{ 'merchantDetails.FPX_All' | translate }}
+                        </ion-col>
+                        <ion-col size="2" *ngIf="ngForm.value.is_ringgit_pay_enabled">
+                            <ion-checkbox formControlName="is_bank_card_enabled"></ion-checkbox> &nbsp;
+                            {{ 'merchantDetails.Card' | translate }}
+                        </ion-col>
+
+                    </ion-row>
+                    <ion-row class="categoryColumns" formGroupName="eStore">
+                        <ion-col size="2" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.Estore' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="ngForm.value.is_fasspay_enabled">
+                            <ion-checkbox formControlName="is_ewallet_enabled"></ion-checkbox> &nbsp;
+                            {{ 'merchantDetails.E-Wallet' | translate }}
+                        </ion-col>
+                        <ion-col size="3" *ngIf="ngForm.value.is_ringgit_pay_enabled">
+                            <ion-checkbox formControlName="is_fpx_enabled"></ion-checkbox>&nbsp;
+                            {{ 'merchantDetails.FPX_Casa_Only' | translate }}
+                        </ion-col>
+                        <ion-col size="3" *ngIf="ngForm.value.is_ringgit_pay_enabled">
+                            <ion-checkbox formControlName="is_fpx_card_enabled"></ion-checkbox>&nbsp;
+                            {{ 'merchantDetails.FPX_All' | translate }}
+                        </ion-col>
+                        <ion-col size="2" *ngIf="ngForm.value.is_ringgit_pay_enabled">
+                            <ion-checkbox formControlName="is_bank_card_enabled"></ion-checkbox> &nbsp;
+                            {{ 'merchantDetails.Card' | translate }}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="categoryColumns" formGroupName="invoice">
+                        <ion-col size="2" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.Invoice' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="ngForm.value.is_fasspay_enabled">
+                            <ion-checkbox formControlName="is_ewallet_enabled"></ion-checkbox> &nbsp;
+                            {{ 'merchantDetails.E-Wallet' | translate }}
+                        </ion-col>
+                        <ion-col size="3" *ngIf="ngForm.value.is_ringgit_pay_enabled">
+                            <ion-checkbox formControlName="is_fpx_enabled"></ion-checkbox>&nbsp;
+                            {{ 'merchantDetails.FPX_Casa_Only' | translate }}
+                        </ion-col>
+                        <ion-col size="3" *ngIf="ngForm.value.is_ringgit_pay_enabled">
+                            <ion-checkbox formControlName="is_fpx_card_enabled"></ion-checkbox>&nbsp;
+                            {{ 'merchantDetails.FPX_All' | translate }}
+                        </ion-col>
+                        <ion-col size="2" *ngIf="ngForm.value.is_ringgit_pay_enabled">
+                            <ion-checkbox formControlName="is_bank_card_enabled"></ion-checkbox> &nbsp;
+                            {{ 'merchantDetails.Card' | translate }}
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row formGroupName="payment_channels">
+                <ion-col size="12"
+                         *ngIf="showCurrentColumn() && (ngForm.value.is_ringgit_pay_enabled || ngForm.value.is_fasspay_enabled || (merchantData && (merchantData?.is_fasspay_enabled || merchantData?.is_ringgit_pay_enabled)))">
+                    <ion-label>{{ 'merchantDetails.Updated' | translate }} </ion-label>
+                    <ion-row class="categoryColumns" formGroupName="mealPlan">
+                        <ion-col size="2" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.Mealplan' | translate }} </ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.mealPlan.is_ewallet_enabled || true"
+                                          disabled></ion-checkbox> &nbsp; {{ 'merchantDetails.E-Wallet' | translate }}
+                        </ion-col>
+
+                        <ion-col size="3" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.mealPlan.is_fpx_enabled || false"
+                                          disabled></ion-checkbox>&nbsp;{{ 'merchantDetails.FPX_Casa_Only' | translate }}
+                        </ion-col>
+                        <ion-col size="3" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.mealPlan.is_fpx_card_enabled || false"
+                                          disabled></ion-checkbox>&nbsp;{{ 'merchantDetails.FPX_All' | translate }}
+                        </ion-col>
+
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.mealPlan.is_bank_card || false"
+                                          disabled></ion-checkbox> &nbsp;{{ 'merchantDetails.Card' | translate }}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="categoryColumns" formGroupName="eStore">
+                        <ion-col size="2" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.Estore' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.eStore.is_ewallet_enabled || true"
+                                          disabled></ion-checkbox> &nbsp; {{ 'merchantDetails.E-Wallet' | translate }}
+                        </ion-col>
+
+                        <ion-col size="3" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.eStore.is_fpx_enabled || false"
+                                          disabled></ion-checkbox>&nbsp;{{ 'merchantDetails.FPX_Casa_Only' | translate }}
+                        </ion-col>
+                        <ion-col size="3" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.eStore.is_fpx_card_enabled || false"
+                                          disabled></ion-checkbox>&nbsp;{{ 'merchantDetails.FPX_All' | translate }}
+                        </ion-col>
+
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.eStore.is_bank_card || false"
+                                          disabled></ion-checkbox> &nbsp;{{ 'merchantDetails.Card' | translate }}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="categoryColumns" formGroupName="invoice">
+                        <ion-col size="2" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.Invoice' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.invoice.is_ewallet_enabled || true"
+                                          disabled></ion-checkbox> &nbsp; {{ 'merchantDetails.E-Wallet' | translate }}
+                        </ion-col>
+
+                        <ion-col size="3" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.invoice.is_fpx_enabled || false"
+                                          disabled></ion-checkbox>&nbsp;{{ 'merchantDetails.FPX_Casa_Only' | translate }}
+                        </ion-col>
+                        <ion-col size="3" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.invoice.is_fpx_card_enabled || false"
+                                          disabled></ion-checkbox>&nbsp;{{ 'merchantDetails.FPX_All' | translate }}
+                        </ion-col>
+
+                        <ion-col size="2" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.tmp_payment_channels.invoice.is_bank_card || false"
+                                          disabled></ion-checkbox> &nbsp;{{ 'merchantDetails.Card' | translate }}
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <!--    Payment Channels End-->
+
+        <!--    Payment Channels Start-->
+        <ion-grid *ngIf="current.is_payment_settlement_commission_enabled">
+            <ion-row>
+                <ion-col size="12">
+                    <ion-label class="label">{{ 'merchantDetails.payment_settlement_commission' | translate }}</ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <!-- Container for the scrollable area -->
+                <ion-col size="12">
+                    <div class="horizontal-scroll-container">
+                        <ion-row>
+                            <!-- Payment type segments -->
+                            
+                            <!-- Repeat this structure for each payment type -->
+                            <ion-col size="3" class="payment-type-container" formGroupName="cash">
+                                <ion-row>
+                                    <ion-col size="12" class="text-align-center"><b>Cash</b></ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="fixed" placeholder="fixed" formControlName="fixed">
+                                        </mat-form-field>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="rate" placeholder="Percentage" formControlName="rate">
+                                        </mat-form-field>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                            <!-- Add other payment types here following the same structure -->
+                            <!-- Repeat this structure for each payment type -->
+                            <ion-col size="3" class="payment-type-container" formGroupName="cash">
+                                <ion-row>
+                                    <ion-col size="12" class="text-align-center"><b>Cash</b></ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="fixed" placeholder="fixed" formControlName="fixed">
+                                        </mat-form-field>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="rate" placeholder="Percentage" formControlName="rate">
+                                        </mat-form-field>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                            <!-- Add other payment types here following the same structure -->
+                            <!-- Repeat this structure for each payment type -->
+                            <ion-col size="3" class="payment-type-container" formGroupName="cash">
+                                <ion-row>
+                                    <ion-col size="12" class="text-align-center"><b>Cash</b></ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="fixed" placeholder="fixed" formControlName="fixed">
+                                        </mat-form-field>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="rate" placeholder="Percentage" formControlName="rate">
+                                        </mat-form-field>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                            <!-- Add other payment types here following the same structure -->
+                            <!-- Repeat this structure for each payment type -->
+                            <ion-col size="3" class="payment-type-container" formGroupName="cash">
+                                <ion-row>
+                                    <ion-col size="12" class="text-align-center"><b>Cash</b></ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="fixed" placeholder="fixed" formControlName="fixed">
+                                        </mat-form-field>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="rate" placeholder="Percentage" formControlName="rate">
+                                        </mat-form-field>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                            <!-- Add other payment types here following the same structure -->
+                            <!-- Repeat this structure for each payment type -->
+                            <ion-col size="3" class="payment-type-container" formGroupName="cash">
+                                <ion-row>
+                                    <ion-col size="12" class="text-align-center"><b>Cash</b></ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="fixed" placeholder="fixed" formControlName="fixed">
+                                        </mat-form-field>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="rate" placeholder="Percentage" formControlName="rate">
+                                        </mat-form-field>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                            <!-- Add other payment types here following the same structure -->
+                            <!-- Repeat this structure for each payment type -->
+                            <ion-col size="3" class="payment-type-container" formGroupName="cash">
+                                <ion-row>
+                                    <ion-col size="12" class="text-align-center"><b>Cash</b></ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="fixed" placeholder="fixed" formControlName="fixed">
+                                        </mat-form-field>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline" class="display-block">
+                                            <input matInput type="number" name="rate" placeholder="Percentage" formControlName="rate">
+                                        </mat-form-field>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                            <!-- Add other payment types here following the same structure -->
+                            
+                        </ion-row>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        
+        <!--    Payment Channels End-->
+
+
+        <!--    Alert Status Section Start -->
+        <ion-grid>
+            <ion-row formGroupName="lowStockAlertConfig">
+                <ion-col size="12">
+                    <ion-label class="label">{{ 'merchantDetails.alertStatus' | translate }}</ion-label>
+                    <ion-row class="categoryColumns">
+                        <ion-col size="2" class="marginCenter">
+                            <ion-label>{{ 'merchantDetails.lowBalanceAlert' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="5" *ngIf="showCurrentColumn()">
+                            <ion-checkbox [checked]="current.is_enabled || false" disabled></ion-checkbox>
+                        </ion-col>
+                        <ion-col [size]="(!showCurrentColumn())? '10':'5'">
+                            <ion-checkbox formControlName="is_enabled"></ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                    <ng-container *ngIf="ngForm.get('lowStockAlertConfig').value.is_enabled">
+
+                        <ion-row>
+                            <ion-col size="6">
+                                <ion-row class="nameColumns" *ngIf="showCurrentColumn()">
+                                    <ion-col size="6" class="marginCenter">
+                                        <ion-label
+                                                class="tax-lbl">{{ 'merchantDetails.stockDropsTo' | translate }}</ion-label>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline">
+                                            <input matInput type="number"
+                                                   [value]="merchantData.lowStockAlertConfig.on_quantity"
+                                                   name="on_quantity" formControlName="on_quantity">
+                                        </mat-form-field>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row class="nameColumns" *ngIf="showCurrentColumn()">
+                                    <ion-col size="6" class="marginCenter">
+                                        <ion-label
+                                                class="tax-lbl">{{ 'merchantDetails.alertEmail' | translate }}</ion-label>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline">
+                                            <input matInput type="email"
+                                                   [value]="merchantData.lowStockAlertConfig.send_to_email"
+                                                   name="send_to_email" formControlName="send_to_email">
+                                        </mat-form-field>
+
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                        </ion-row>
+
+                        <ion-row *ngIf="showCurrentColumn()">
+                            <ion-col class="ion-text-left">
+                                <ion-label>{{ 'common.updated' | translate }}</ion-label>
+                            </ion-col>
+                            <ion-col size="1.5"></ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size="6">
+                                <ion-row class="nameColumns">
+                                    <ion-col size="6" class="marginCenter">
+                                        <ion-label
+                                                class="tax-lbl">{{ 'merchantDetails.stockDropsTo' | translate }}</ion-label>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline">
+                                            <input matInput type="number" name="on_quantity"
+                                                   formControlName="on_quantity">
+
+                                        </mat-form-field>
+                                        <div *ngIf="ngForm.get('lowStockAlertConfig.on_quantity').invalid && (ngForm.get('lowStockAlertConfig.on_quantity').dirty || ngForm.get('lowStockAlertConfig.on_quantity').touched)">
+                                            <mat-error
+                                                    *ngIf="ngForm.get('lowStockAlertConfig.on_quantity').hasError('required')">
+                                                Quantity is
+                                                required.
+                                            </mat-error>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row class="nameColumns">
+                                    <ion-col size="6" class="marginCenter">
+                                        <ion-label
+                                                class="tax-lbl">{{ 'merchantDetails.alertEmail' | translate }}</ion-label>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline">
+                                            <input matInput type="email" name="send_to_email"
+                                                   formControlName="send_to_email">
+                                        </mat-form-field>
+                                        <div *ngIf="ngForm.get('lowStockAlertConfig.send_to_email').invalid && (ngForm.get('lowStockAlertConfig.send_to_email').dirty || ngForm.get('lowStockAlertConfig.send_to_email').touched)">
+                                            <mat-error
+                                                    *ngIf="ngForm.get('lowStockAlertConfig.send_to_email').hasError('required')">
+                                                Email is
+                                                required.
+                                            </mat-error>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                        </ion-row>
+
+
+                    </ng-container>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ng-container>
+
+                        <ion-row>
+                            <ion-col size="6">
+                                <ion-row class="nameColumns" *ngIf="showCurrentColumn()">
+                                    <ion-col size="4" class="marginCenter">
+                                        <ion-label
+                                                class="tax-lbl">{{ 'merchantDetails.estoreAlertEmail' | translate }}</ion-label>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline">
+                                            <input matInput type="email" [value]="current.estore_alert_email || ''"
+                                                   disabled name="estore_alert_email"
+                                                   formControlName="estore_alert_email">
+                                        </mat-form-field>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                        </ion-row>
+
+                        <ion-row *ngIf="showCurrentColumn()">
+                            <ion-col class="ion-text-left">
+                                <ion-label>{{ 'common.updated' | translate }}</ion-label>
+                            </ion-col>
+                            <ion-col size="1.5"></ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size="6">
+                                <ion-row class="nameColumns">
+                                    <ion-col size="4" class="marginCenter">
+                                        <ion-label
+                                                class="tax-lbl">{{ 'merchantDetails.estoreAlertEmail' | translate }}</ion-label>
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <mat-form-field appearance="outline">
+                                            <input matInput type="email" name="estore_alert_email"
+                                                   formControlName="estore_alert_email">
+                                        </mat-form-field>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                        </ion-row>
+
+
+                    </ng-container>
+                </ion-col>
+            </ion-row>
+
+        </ion-grid>
+        <!--    Alert Status Section End -->
+
+
+        <!--    Vending Machine Configuration Start -->
+        <ion-grid>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-label
+                            class="label">{{ 'merchantDetails.vending_machine_configuration' | translate }}</ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row class="nameColumns">
+                <ion-col size="2" class="marginCenter">
+                    <ion-label>{{ 'merchantDetails.allowed_ips' | translate }}</ion-label>
+                </ion-col>
+                <ion-col size="5" *ngIf="showCurrentColumn()">
+                    <mat-form-field appearance="outline">
+            <textarea matInput [value]="current.vending_machines_allowed_ips || ''" disabled rows="5"
+                      maxlength="250"></textarea>
+                    </mat-form-field>
+                </ion-col>
+                <ion-col [size]="(!showCurrentColumn())? '10':'5'">
+                    <mat-form-field appearance="outline">
+            <textarea matInput name="vending_machines_allowed_ips" formControlName="vending_machines_allowed_ips"
+                      placeholder="192.168.10.1
+192.168.10.2
+192.168.10.3
+192.168.10.4"
+                      rows="5" maxlength="250" (input)="handleTextareaInput($event)"></textarea>
+                    </mat-form-field>
+                    <mat-error *ngIf="!isValidIP">{{invalidIPMessage}}</mat-error>
+                </ion-col>
+            </ion-row>
+            <ion-row class="nameColumns">
+                <ion-col size="2" class="marginCenter">
+                    <ion-label>{{ 'merchantDetails.void_duration' | translate }}</ion-label>
+                </ion-col>
+                <ion-col size="5" *ngIf="showCurrentColumn()">
+                    <mat-form-field appearance="outline">
+                        <input matInput class="fakeInput" disabled>
+                        <mat-select *ngIf="merchantData"
+                                    [value]="merchantData.vending_machines_void_duration_in_minutes" disabled>
+                            <mat-option [value]="merchantData.vending_machines_void_duration_in_minutes">
+                                {{ merchantData.vending_machines_void_duration_in_minutes }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ion-col>
+                <ion-col [size]="(!showCurrentColumn())? '10':'5'">
+                    <mat-form-field appearance="outline">
+                        <mat-select formControlName="vending_machines_void_duration_in_minutes">
+                            <mat-option *ngFor="let data of voidDurationInMinutes" [value]="data">
+                                {{ data }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>{{ getErrors('vending_machines_void_duration_in_minutes') }}</mat-error>
+                    </mat-form-field>
+                </ion-col>
+            </ion-row>
+
+        </ion-grid>
+        <!--    Vending Machine Configuration End -->
+
+
+        <ion-grid>
+            <!--Merchant Users-->
+            <ion-label class="label">{{ 'merchantDetails.merchantUser' | translate }}</ion-label>
+
+            <ion-row formArrayName="merchant_users"
+                     *ngFor="let class of ngForm.get('merchant_users').controls; let i = index;">
+                <ion-col [formGroupName]="i">
+                    <ion-label class="userLabel">{{ 'menu.user' | translate }} {{ i + 1 }}</ion-label>
+                    <ion-row class="nameColumns">
+                        <ion-col class="marginCenter" size="2">
+                            <ion-label>{{ 'merchantUserDetails.fullName' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="10">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="name" formControlName="name">
+                                <mat-error>{{ getArrayError('merchant_users', 'name', i) }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="nameColumns">
+                        <ion-col class="marginCenter" size="2">
+                            <ion-label>{{ 'merchantUserDetails.emailAddress' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="10">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="email" formControlName="email">
+                                <mat-error>{{ getArrayError('merchant_users', 'email', i) }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="nameColumns mobileNumber">
+                        <ion-col class="marginCenter" size="2">
+                            <ion-label>{{ 'merchantUserDetails.mobileNo' | translate }}</ion-label>
+                        </ion-col>
+                        <ion-col size="2">
+                            <mat-form-field appearance="outline" floatLabel="always">
+                                <mat-select formControlName="mobileCountryCode">
+                                    <mat-option value="+60">{{ 'mobileNumber.countryCode.MY' | translate }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ion-col>
+                        <ion-col size="8">
+                            <mat-form-field appearance="outline">
+                                <input matInput name="mobileNumber" formControlName="mobileNumber">
+                                <mat-error>{{ getArrayError('merchant_users', 'mobileNumber', i) }}</mat-error>
+                            </mat-form-field>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="showAddUserButton">
+                <ion-button (click)="addUser()">{{ 'buttons.addNewUser' | translate }}</ion-button>
+            </ion-row>
+
+            <ion-row>
+                <ion-col class="ion-text-right">
+                    <ion-button standard color="medium" (click)="cancel()">{{ 'buttons.cancel' | translate }}
+                    </ion-button>
+                    <ion-button standard *ngIf="isUpdatable()"
+                                (click)="submit()">{{ 'buttons.submit' | translate }}</ion-button>
+                    <ion-button *ngIf="isPending()" standard color="danger"
+                                (click)="reject()">{{ 'buttons.reject' | translate }}
+                    </ion-button>
+                    <ion-button *ngIf="isPending()" standard color="success" (click)="approve()">
+                        {{ 'buttons.approve' | translate }}</ion-button>
+                </ion-col>
+            </ion-row>
+
+        </ion-grid>
+    </form>
+
+
+    <!-- TBD - data unable to retrieve for now as the merchant users are in cognito service -->
+    <datatable [data]="data" (sortEmitter)="onSort($event)" (selectEmitter)="onSelect($event)"
+               (eventEmitter)="data.routeCustomMethod(this,$event)">
+    </datatable>
+
+</ion-content>
